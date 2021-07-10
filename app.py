@@ -9,8 +9,8 @@ from os import listdir
 import random
 import bcrypt
 
-application = Flask(__name__)
-application.secret_key = "blah"
+app = Flask(__name__)
+app.secret_key = "blah"
 dbStuff = classDbStuff()
 obEs = enterStuff()
 
@@ -32,13 +32,13 @@ def checkLogin():
         accessLevel = 0
     return [status,userName,accessLevel]
 
-@application.route('/')
+@app.route('/')
 def home():
     ckl = checkLogin()
     color = "%06x" % random.randint(0, 0xFFFFFF)
     return render_template('base.html',color=color,ckl=ckl)
 
-@application.route('/settings', methods=["POST","GET"])
+@app.route('/settings', methods=["POST","GET"])
 def settings():
     color = "%06x" % random.randint(0, 0xFFFFFF)
     ckl = checkLogin()
@@ -46,7 +46,7 @@ def settings():
         session['working_user'] = request.form['working_user']
     return render_template('settings.html',color=color,ckl=ckl,workingUser=session['working_user'])
 
-@application.route('/login')
+@app.route('/login')
 def login():
     ckl = checkLogin()
     if ckl[0] == 1:
@@ -55,7 +55,7 @@ def login():
         message = "Log in and get to work!"
     return render_template('login1.html',message=message,status=ckl[0])
 
-@application.route('/login2', methods=['POST'])
+@app.route('/login2', methods=['POST'])
 def login2():
     ckl = checkLogin()
     message = "Whoops! That didn't work!"
@@ -77,7 +77,7 @@ def login2():
                 message = "User: " + request.form['username'] + " is logged in!"
     return render_template('login2.html',message=message)
 
-@application.route('/logout')
+@app.route('/logout')
 def logout():
     ckl = checkLogin()
     if ckl[0] == 1:
@@ -87,7 +87,7 @@ def logout():
         message = "You were never logged in!"
     return render_template('logout.html',message=message)
 
-@application.route('/dashboard')
+@app.route('/dashboard')
 def dashboard():
     ckl = checkLogin()
     dashboardData = {}
@@ -96,7 +96,7 @@ def dashboard():
         dashboardData['count_incomplete_docs'] = dbStuff.getCountIncompleteDocuments()
     return render_template('dashboard.html',dashboardData=dashboardData,ckl=ckl)
 
-@application.route('/new_files', methods=["POST","GET"])
+@app.route('/new_files', methods=["POST","GET"])
 def new_files():
     newFiles = []
     resultImport = ""
@@ -121,7 +121,7 @@ def new_files():
             resultImport = "There were " + str(len(newFiles)) + " new files imported: "
     return render_template('new_files.html',resultImport=resultImport,newFiles=newFiles,ckl=ckl)
 
-@application.route('/enter_stuff')
+@app.route('/enter_stuff')
 def enter_stuff():
     configs = {}
     message = "Looks like you are done entering data!"
@@ -139,7 +139,7 @@ def enter_stuff():
                 configs['data_choices'] = obEs.dataFields()[configs['data_field']]['data_choices']
     return render_template('enter_stuff.html', configs=configs, ckl=ckl, message=message)
 
-@application.route('/submit', methods=['POST'])
+@app.route('/submit', methods=['POST'])
 def submit():
     params = {}
     ckl = checkLogin()
@@ -150,7 +150,7 @@ def submit():
         dbStuff.updateDocument(params,ckl[1])
     return render_template('submit.html',params=params,ckl=ckl)
 
-@application.route('/mark_unknown/<docnum>/<dataField>')
+@app.route('/mark_unknown/<docnum>/<dataField>')
 def markUnknown(docnum,dataField):
     params = {}
     ckl = checkLogin()
@@ -161,12 +161,12 @@ def markUnknown(docnum,dataField):
         dbStuff.updateDocument(params,ckl[1])
     return render_template('submit.html',params=params,ckl=ckl)
 
-@application.route('/create_letter')
+@app.route('/create_letter')
 def letter():
     ckl = checkLogin()
     return render_template('letter.html',ckl=ckl)
 
-@application.route('/mail_merge1', methods=["GET","POST"])
+@app.route('/mail_merge1', methods=["GET","POST"])
 def mail_merge1():
     ft = obEs.firstTuesdays()
     dfm = ""
@@ -179,7 +179,7 @@ def mail_merge1():
         dfm = obMm.getDataForMerge(session['working_user'],tsd)
     return render_template('mailmerge1.html',dfm=dfm,ckl=ckl,tsd=tsd,ft=ft)
 
-@application.route('/mail_merge2',methods=['POST'])
+@app.route('/mail_merge2',methods=['POST'])
 def mail_merge2():
     ckl = checkLogin()
     if ckl[0] == 1:
@@ -189,7 +189,7 @@ def mail_merge2():
         obMm.mailMerge(ckl,ltm)
     return render_template('mailmerge2.html',ltm=ltm,ckl=ckl)
 
-@application.route('/responses', methods=["GET","POST"])
+@app.route('/responses', methods=["GET","POST"])
 def responses():
     ft = obEs.firstTuesdays()
     dfm = ""
@@ -204,7 +204,7 @@ def responses():
         dfm = obR.getDataForView(session['working_user'],tsd,filter)
     return render_template('responses.html',dfm=dfm,ckl=ckl,tsd=tsd,ft=ft,filter=filter)
 
-@application.route('/enter_response/<docnum>', methods=["GET"])
+@app.route('/enter_response/<docnum>', methods=["GET"])
 def enter_response(docnum):
     dfm = []
     rrr = []
@@ -215,7 +215,7 @@ def enter_response(docnum):
         dfm = obR.getDataForSingleView(session['working_user'],docnum)
     return render_template('enter_response.html',dfm=dfm,ckl=ckl,rrr=rrr)
 
-@application.route('/submit_response', methods=["POST"])
+@app.route('/submit_response', methods=["POST"])
 def submit_response():
     message = "Not logged in!"
     ckl = checkLogin()
@@ -224,7 +224,7 @@ def submit_response():
         message = request.form['response']
     return render_template('submit_response.html',ckl=ckl,docnum=request.form['docnum'],message=message)
 
-@application.route('/submit_return/<ooo>', methods=["GET"])
+@app.route('/submit_return/<ooo>', methods=["GET"])
 def enter_return(ooo):
     ckl = checkLogin()
     if ckl[0] == 1:
@@ -233,12 +233,12 @@ def enter_return(ooo):
         dbStuff.enterReturn(ckl[1],docnum,mailing)
     return render_template('submit_return.html',ckl=ckl,docnum=docnum,mailing=mailing)
 
-@application.route('/sysadmin')
+@app.route('/sysadmin')
 def sysadmin():
     ckl = checkLogin()
     return render_template('sysadmin.html',ckl=ckl)
 
-@application.route('/dbtable/<operation>')
+@app.route('/dbtable/<operation>')
 def dbtable(operation):
     result = ""
     ckl = checkLogin()
@@ -254,4 +254,4 @@ def dbtable(operation):
     return render_template('make_table.html',operation=operation,result=result,ckl=ckl)
 
 if __name__ == "__main__":
-    application.run()
+    app.run()
