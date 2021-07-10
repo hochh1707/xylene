@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}"/>
+
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+      	<meta name="viewport" content="width=device-width, initial-scale=1">
+      	<meta name="description" content="Build or repair just about anything" />
+      	<meta name="keywords" content="handyman, waco, texas, home improvement, house repairs, contractor" />
+      	<meta name="author" content="hellofixit.net" />
+</head>
+<body style="background-color: #{{color}}">
+  <div style="background-color: grey;">
+    <div class="working">  
+      {% block content %}
+      SETTINGS
+      <br><br>
+      <a href="/">Xylene Home</a>
+      <br><br>
+      Username: {{ckl[1]}}
+      <br><br>
+      {%if ckl[0]==1:%}
+        <form action="/settings" method="POST">
+          <label>Select user for entering data and mail merge: </label>
+          <select name="working_user" id="working_user">
+            <option value="{{ckl[1]}}" {%if workingUser=='{{ckl[1]}}':%}selected{%endif%}>{{ckl[1]}}</option>
+            <option value="all" {%if workingUser=='all':%}selected{%endif%}>all users</option>
+          </select>
+          <br><br>
+          <input type="submit" value="Submit">
+        </form>
+      {%endif%}
+      {% endblock %}
+    </div>
+  </div>
+</body>
+</html>

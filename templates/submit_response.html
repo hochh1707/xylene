@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}"/>
+
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+      	<meta name="viewport" content="width=device-width, initial-scale=1">
+      	<meta name="description" content="Build or repair just about anything" />
+      	<meta name="keywords" content="handyman, waco, texas, home improvement, house repairs, contractor" />
+      	<meta name="author" content="hellofixit.net" />
+</head>
+
+<body style="background-color: #e4f1e1;">
+  <div style="background-color: grey;">
+  <div class="working">  
+  {% block content %}
+    CONFIRM ENTER RESPONSE
+    <br><br>
+    <a href="/">Xylene Home</a>
+    <br><br>
+    Username: {{ckl[1]}}
+    <br><br>
+    {%if ckl[0]==1:%}
+      Ok, got it. You entered the following response for document number {{docnum}}:
+      <br><br>
+      {{message}}
+      <br><br>
+      <a href="/enter_response/{{docnum}}">Back to detail view</a>
+    {%else:%}
+      {{message}}
+    {%endif%}
+  {% endblock %}
+  </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}"/>
+
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+      	<meta name="viewport" content="width=device-width, initial-scale=1">
+      	<meta name="description" content="Build or repair just about anything" />
+      	<meta name="keywords" content="handyman, waco, texas, home improvement, house repairs, contractor" />
+      	<meta name="author" content="hellofixit.net" />
+</head>
+{% block content %}
+<body style="background-color: #{{color}}">
+<div style="background-color: grey;">
+  <div class="working">  
+    Welcome to Xylene
+    <br><br>
+    Username: {{ckl[1]}}
+    <br><br>
+    We don't have time for singing and dancing right now. Get to work.
+    {%if ckl[0]==0%}
+    <br><br>
+    <a href="/login">Login</a>
+    {%elif ckl[0]==1:%}
+      <br><br>
+      <a href="/settings">User Settings</a>
+      <br><br>
+      <a href="/dashboard">View Dashboard</a>
+      <br><br>
+      <a href="/new_files">Add New Documents</a>
+      <br><br>
+      <a href="/enter_stuff">Enter Stuff</a>
+      <br><br>
+      <a href="/create_letter">Create a Letter</a>
+      <br><br>
+      <a href="/mail_merge1">Mail Merge</a>
+      <br><br>
+      <a href="/responses">Enter Returns and Responses</a>
+      <br><br>
+      <a href="/sysadmin">System Admin</a>
+      <br><br>
+      <a href="/logout">Logout</a>
+      {%endif%}
+{% endblock %}
+  </div>
+</div>
+</body>
+</html>

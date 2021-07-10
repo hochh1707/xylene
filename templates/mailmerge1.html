@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}"/>
+
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+      	<meta name="viewport" content="width=device-width, initial-scale=1">
+      	<meta name="description" content="Build or repair just about anything" />
+      	<meta name="keywords" content="handyman, waco, texas, home improvement, house repairs, contractor" />
+      	<meta name="author" content="hellofixit.net" />
+</head>
+<body style="background-color: #60e1b0;">
+  <div style="background-color: grey;">
+    <div class="working">
+      {% block content %}
+      MAIL MERGE
+      <br><br>
+      <a href="/">Xylene Home</a>
+      <br><br>
+      Username: {{ckl[1]}}
+      <br><br>
+      {%if ckl[0]==1:%}
+        {%if dfm == None:%}
+        There are no documents ready to mail merge!
+        {%else:%}
+        <div>
+          Choose a trustee sale date:
+          <br>
+          <form action="/mail_merge1" method="POST">
+            <input type="radio" name="tsd" value="all" {%if tsd=="all":%}checked{%endif%}><label>All</label><br>
+            {%for f in ft:%}
+              <input type="radio" name="tsd" value="{{f}}" {%if tsd==f:%}checked{%endif%}><label>{{f}}</label><br>
+            {%endfor%}
+            <input type="submit" value="submit">
+          </form>
+          <br><br>
+          <form action="/mail_merge2" method="POST">
+          {%for i in dfm:%}
+          <table style="padding:2%; margin:2%; min-width: 96%; border-style: double;">
+            <tr>
+              <td style="border: 1px solid black">{{i['docnum']}}</td>
+              <td colspan="2">{{i['owner_name']}}</td>
+            </tr>
+            <tr><td>Property:</td><td colspan="2">{{i['property_address']}}</td></tr>
+            <tr><td>Trustee sale date:</td><td colspan="2">{{i['trustee_sale_date']}}</td></tr>
+            <tr>
+              <td>{%if i['owner_mailing1'] != "unk":%}<input type="checkbox" name="{{i['docnum']}}_m1" checked>{%endif%}</td>
+              <td>Mailing1:</td><td>{{i['owner_mailing1']}}</td>
+            </tr>
+            <tr>
+              <td>{%if i['owner_mailing2'] != "unk":%}<input type="checkbox" name="{{i['docnum']}}_m2" checked>{%endif%}</td>
+              <td>Mailing2:</td><td>{{i['owner_mailing2']}}</td>
+            </tr>
+          </table>
+          {%endfor%}
+        <input type="submit" value="merge!">
+        </form>
+        </div>
+        {%endif%}
+      {%endif%}
+      {% endblock %}
+    </div>
+  </div>
+</body>
+</html>

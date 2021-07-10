@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}"/>
+
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+      	<meta name="viewport" content="width=device-width, initial-scale=1">
+      	<meta name="description" content="Build or repair just about anything" />
+      	<meta name="keywords" content="handyman, waco, texas, home improvement, house repairs, contractor" />
+      	<meta name="author" content="hellofixit.net" />
+</head>
+<body style="background-color: #e6e1f1;">
+  <div style="background-color: grey;">
+    <div class="working">
+  {% block content %}
+      ENTER STUFF
+      <br><br>
+      <a href="/">Xylene Home</a>
+      <br><br>
+      Username: {{ckl[1]}}
+      <br><br>
+      {%if ckl[0]==1 and configs|length==0:%}
+        {{message}}
+      {%elif ckl[0]==1:%}
+        Here's what we already have for this document:
+        <br><br>
+        <table>
+        <tr><td style="border:1px solid black">docnum</td><td>{{configs['docnum']}}</td>
+        {%for i in configs['doc_data']%}
+          <tr><td style="border:1px solid black">{{i}}</td><td>{{configs['doc_data'][i]}}</td>
+        {%endfor%}
+        </table>
+        <br><br>
+        Now enter the following data: {{configs['data_field']}}
+        <br><br>
+        <form action="/submit" method="post">
+          <input type="hidden" name="docnum" value="{{configs['docnum']}}">
+          <input type="hidden" name="data_field" value="{{configs['data_field']}}">
+          {%if configs['input_type']=='radio':%}
+            {%for i in configs['data_choices']%}
+            <input type="{{configs['input_type']}}" id="{{i}}" name="data" value="{{i}}">
+            <label for="{{i}}">{{i}}</label><br>
+            {%endfor%}
+          {%else:%}
+            {%if configs['max_length'] > 50:%}
+            <textarea name="data" autofocus=autofocus cols="50" rows="4" maxlength="{{configs['max_length']}}"></textarea>
+            {%else:%}
+            <input type="text" name="data" autofocus=autofocus size="{{configs['max_length']}}" maxlength="{{configs['max_length']}}">
+            {%endif%}
+          {%endif%}
+          <br><br>
+          <input type="submit" value="submit">
+        </form>
+        <br><br>
+        {%if configs['data_field'] == "owner_name":%}
+        <form id="myform" method="post" action="/submit">
+          <input type="hidden" name="docnum" value="{{configs['docnum']}}">
+          <input type="hidden" name="data_field" value="{{configs['data_field']}}">
+          <input type="hidden" name="data" value="{{configs['doc_data']['borrower_name']}}">
+          <a href="#" onclick="document.forms[1].submit();return false;">Owner name is same as borrower</a>
+        </form>
+        {%endif%}
+        {%if configs['data_field'] == "owner_mailing1":%}
+        <form id="myform" method="post" action="/submit">
+          <input type="hidden" name="docnum" value="{{configs['docnum']}}">
+          <input type="hidden" name="data_field" value="{{configs['data_field']}}">
+          <input type="hidden" name="data" value="{{configs['doc_data']['property_address']}}">
+          <a href="#" onclick="document.forms[1].submit();return false;">Owner mailing address is the same as property</a>
+        </form>
+        {%endif%}
+        <br><br>
+        <a href="/mark_unknown/{{configs['docnum']}}/{{configs['data_field']}}">Skip and mark it unknown</a>
+        <br><br>
+    </div>
+  </div>
+  <div style="width: 50%; margin-left: auto; margin-right: auto; margin-top: 100px;">
+      <embed src="/static/documents/{{configs['file_to_show']}}" width="800px" height="2100px"/>
+  </div>
+    {%endif%}
+  {% endblock %}
+</body>
+</html>

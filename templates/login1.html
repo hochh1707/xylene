@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}"/>
+
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+      	<meta name="viewport" content="width=device-width, initial-scale=1">
+      	<meta name="description" content="Build or repair just about anything" />
+      	<meta name="keywords" content="handyman, waco, texas, home improvement, house repairs, contractor" />
+      	<meta name="author" content="hellofixit.net" />
+</head>
+<body style="background-color: #985d11;">
+  <div style="background-color: grey;">
+    <div class="working"
+      {% block content %}
+      LOGIN
+      <br><br>
+      <a href="/">Xylene Home</a>
+      <br><br>
+      {%if status == 0:%}
+        {{message}}
+        <br><br>
+        <form action="login2" method="post">
+          <label>Username: </label>
+          <input type="text" name="username" autofocus=autofocus>
+          <br><br>
+          <label>Password: </label>
+          <input type="text" name="password">
+          <br><br>
+          <input type="submit" value="Login">
+        </form>
+      {%else:%}
+        {{message}}
+      {%endif%}
+      {% endblock %}
+    </div>
+  </div>
+</body>
+</html>

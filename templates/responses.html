@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}"/>
+
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+      	<meta name="viewport" content="width=device-width, initial-scale=1">
+      	<meta name="description" content="Build or repair just about anything" />
+      	<meta name="keywords" content="handyman, waco, texas, home improvement, house repairs, contractor" />
+      	<meta name="author" content="hellofixit.net" />
+</head>
+<body style="background-color: #60e1b0;">
+  <div style="background-color: grey;">
+    <div class="working">
+      {% block content %}
+      ENTER RETURNS AND RESPONSES
+      <br><br>
+      <a href="/">Xylene Home</a>
+      <br><br>
+      Username: {{ckl[1]}}
+      <br><br>
+      {%if ckl[0]==1:%}
+        <div>
+          Choose a trustee sale date:
+          <br><br>
+          <form action="/responses" method="POST">
+            <input type="radio" name="tsd" value="all" {%if tsd=="all":%}checked{%endif%}><label>All</label><br>
+            {%for f in ft:%}
+              <input type="radio" name="tsd" value="{{f}}" {%if tsd==f:%}checked{%endif%}><label>{{f}}</label><br>
+            {%endfor%}
+            <br><br>
+            <label>Filter: </label><input type="text" name="filter" value="{{filter}}">
+            <input type="submit" value="submit">
+          </form>
+          <br><br>
+          {%if dfm == None:%}
+            There are no results with your search criteria!
+          {%else:%}
+          {%for i in dfm:%}
+          <table style="padding:2%; margin:2%; min-width: 96%; border-style: double;">
+            <tr>
+              <td style="border: 1px solid black">{{i['docnum']}}</td>
+              <td>{{i['owner_name']}}</td>
+            </tr>
+            <tr><td style="border: 1px solid black">Property:</td>
+              <td><a href="/enter_response/{{i['docnum']}}">{{i['property_address']}}</td>
+            </tr>
+            <tr><td style="border: 1px solid black">Trustee sale date:</td><td colspan="2">{{i['trustee_sale_date']}}</td></tr>
+            <tr><td style="border: 1px solid black">Mailing1:</td>
+              <td>{%if i['owner_mailing1'] !="unk":%}<a href="/submit_return/{{i['docnum']}}m1">{%endif%}{{i['owner_mailing1']}}</a></td>
+            </tr>
+            <tr>
+              <td style="border: 1px solid black">Return mail:</td>
+              <td>{%if i['return_mail']['owner_mailing1']|length == 0:%}none{%else:%}{{i['return_mail']['owner_mailing1']|length}}{%endif%}</td>
+            </tr>
+            <tr><td style="border: 1px solid black">Mailing2:</td>
+              <td>{%if i['owner_mailing2'] !="unk":%}<a href="/submit_return/{{i['docnum']}}m2">{%endif%}{{i['owner_mailing2']}}</a></td>
+            </tr>
+            <tr>
+              <td style="border: 1px solid black">Return mail:</td>
+              <td>{%if i['return_mail']['owner_mailing2']|length == 0:%}none{%else:%}{{i['return_mail']['owner_mailing2']|length}}{%endif%}</td>
+            </tr>
+          </table>
+          {%endfor%}
+        </div>
+        {%endif%}
+      {%endif%}
+      {% endblock %}
+    </div>
+  </div>
+</body>
+</html>
