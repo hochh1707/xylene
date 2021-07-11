@@ -122,6 +122,7 @@ def new_files():
                 f.save("static/documents/" + nf)
                 newFiles.append(nf)
                 dbStuff.createBlankDocumentRecord(ckl[1],ndn,obEs.dataFields())
+                ndn = ndn + 1
         message = "There were " + str(len(newFiles)) + " new files imported"
     return render_template('new_files.html',message=message,newFiles=newFiles,ckl=ckl)
 
