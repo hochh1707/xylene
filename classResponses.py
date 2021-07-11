@@ -10,7 +10,8 @@ class classResponses(object):
     def getDataForView(self,workingUser,tsd,filter):
         obDb = classDbStuff()
         ddd = obDb.getListForView(workingUser,filter)
-        if len(ddd) == 0: return None
+        if ddd == None: return None
+        # if len(ddd) == 0: return None
         fff = []
         for d in ddd:
             aaa = {

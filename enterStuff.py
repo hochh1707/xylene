@@ -123,8 +123,9 @@ class enterStuff(object):
     def pickRandomDoc(self,workingUser):
         dbStuff = classDbStuff()
         listOfIncompleteDocs = dbStuff.getListIncompleteDocuments(workingUser)
+        if listOfIncompleteDocs == None: return None
         if len(listOfIncompleteDocs) == 0: return None
-        return random.choice(listOfIncompleteDocs)[0]
+        return random.choice(listOfIncompleteDocs)
 
     def getNextFieldToEnter(self,docnum):
         obDbStuff = classDbStuff()

@@ -21,9 +21,13 @@
       Username: {{ckl[1]}}
       <br><br>
       {%if ckl[0]==1:%}
-        Total document count: {{dashboardData['count_total_docs']}}
-        <br><br>
-        Incomplete document count: {{dashboardData['count_incomplete_docs']}}
+        <table style="padding:2%; margin:2%; min-width: 96%; border-style: double;">
+        {%for i in dashboardData:%}
+          <tr>
+            <td style="border: 1px solid black; width:60%">{{i}}</td>
+            <td style="padding-left:10%">{{dashboardData[i]}}</td>
+          </tr>
+        {%endfor%}
       {%endif%}
       {% endblock %}
     </div>

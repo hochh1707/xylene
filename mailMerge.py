@@ -10,8 +10,8 @@ class mailMerge(object):
     def getDataForMerge(self,workingUser,tsd):
         obDb = classDbStuff()
         ddd = obDb.getListCompleteDocuments(workingUser)
+        if ddd == None: return None
         fff = []
-        if len(ddd) == 0: return None
         for d in ddd:
             aaa = {}
             aaa['docnum'] = d[0]

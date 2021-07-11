@@ -21,7 +21,7 @@
       Username: {{ckl[1]}}
       <br><br>
       {%if ckl[0]==1:%}
-        {%if dfm == None:%}
+        {%if dfm|length == 0:%}
         There are no documents ready to mail merge!
         {%else:%}
         <div>

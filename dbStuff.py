@@ -67,9 +67,10 @@ class classDbStuff(object):
             x = mycursor.fetchone()[0]
             if x == None: x = 100000
             mycursor.close()
+            return x
         except Exception as e:
             print(e)
-        return x
+        return None
 
     def createBlankDocumentRecord(self,userName,docnum,fields):
         for f in fields:
@@ -85,7 +86,7 @@ class classDbStuff(object):
 
     def getListIncompleteDocuments(self,workingUser):
         mycursor = self.mydb.cursor()
-        q1 = "SELECT docnum FROM documents WHERE field_name = 'status' AND data = 'incomplete'"
+        q1 = "SELECT docnum, username_created FROM documents WHERE field_name = 'status' AND data = 'incomplete'"
         if workingUser == "all":
             q1 = q1 + " ORDER BY docnum ASC"
         else:
@@ -94,9 +95,10 @@ class classDbStuff(object):
             mycursor.execute(q1)
             x = list(mycursor.fetchall())
             mycursor.close()
+            return x
         except Exception as e:
             print(e)
-        return x
+        return None
 
     def getListCompleteDocuments(self,workingUser):
         mycursor = self.mydb.cursor()
@@ -110,9 +112,10 @@ class classDbStuff(object):
             mycursor.execute(q1)
             x = list(mycursor.fetchall())
             mycursor.close()
+            return x
         except Exception as e:
             print(e)
-        return x
+        return None
 
     def getListForView(self,workingUser,filter):
         mycursor = self.mydb.cursor()
@@ -126,9 +129,10 @@ class classDbStuff(object):
             mycursor.execute(q1)
             x = list(mycursor.fetchall())
             mycursor.close()
+            return x
         except Exception as e:
             print(e)
-        return x
+        return None
 
     def updateDocument(self,params,userName):
         mycursor = self.mydb.cursor()

@@ -11,7 +11,10 @@ import bcrypt
 
 app = Flask(__name__)
 app.secret_key = "blah"
-dbStuff = classDbStuff()
+try:
+    dbStuff = classDbStuff()
+except Exception as e:
+    dbStuff = 0
 obEs = enterStuff()
 
 def defaultSettings(userName):
@@ -34,8 +37,9 @@ def checkLogin():
 
 @app.route('/')
 def home():
-    ckl = checkLogin()
     color = "%06x" % random.randint(0, 0xFFFFFF)
+    ckl = checkLogin()
+    if dbStuff == 0: return render_template('error.html',ckl=ckl)
     return render_template('base.html',color=color,ckl=ckl)
 
 @app.route('/settings', methods=["POST","GET"])
@@ -93,7 +97,8 @@ def dashboard():
     dashboardData = {}
     if ckl[0] == 1:
         dashboardData['count_total_docs'] = dbStuff.getCountDocuments()
-        dashboardData['count_incomplete_docs'] = dbStuff.getCountIncompleteDocuments()
+        dashboardData['count_incomplete_docs' + '_' + ckl[1]] = dbStuff.getCountIncompleteDocuments(ckl[1])
+        dashboardData['count_incomplete_docs_all'] = dbStuff.getCountIncompleteDocuments("all")
     return render_template('dashboard.html',dashboardData=dashboardData,ckl=ckl)
 
 @app.route('/new_files', methods=["POST","GET"])
@@ -102,6 +107,11 @@ def new_files():
     resultImport = ""
     ckl = checkLogin()
     if ckl[0] == 1:
+        lastDocNum = dbStuff.getLastDocumentNumber()
+        if lastDocNum == None: 
+            return render_template('error.html',ckl=ckl)
+        else:
+            ndn = int(lastDocNum) + 1
         if request.method == "POST":
             fff = request.files.getlist("file")
             for f in fff:
@@ -109,9 +119,8 @@ def new_files():
         bbb = os.listdir("./static/documents")
         for b in bbb:
             if b[0:3] != "doc":
-                lastDocNum = int(dbStuff.getLastDocumentNumber()) + 1
-                dbStuff.createBlankDocumentRecord(ckl[1],lastDocNum,obEs.dataFields())
-                newFile = "doc" + str(lastDocNum) + ".pdf"
+                dbStuff.createBlankDocumentRecord(ckl[1],ndn,obEs.dataFields())
+                newFile = "doc" + str(ndn) + ".pdf"
                 newFiles.append(newFile)
                 os.rename("./static/documents/" + b,"./static/documents/" + newFile)
                 newFile = ""
@@ -127,12 +136,13 @@ def enter_stuff():
     message = "Looks like you are done entering data!"
     ckl = checkLogin()
     if ckl[0] == 1:
-        docnum = obEs.pickRandomDoc(session['working_user'])
-        if docnum != None:
-            configs['docnum'] = docnum
-            configs['data_field'] = obEs.getNextFieldToEnter(docnum)
-            configs['doc_data'] = obEs.getDataForDoc(docnum)
-            configs['file_to_show'] = "doc" + docnum + ".pdf"
+        rd = obEs.pickRandomDoc(session['working_user'])
+        if rd != None:
+            configs['docnum'] = rd[0]
+            configs['username_created'] = rd[1]
+            configs['data_field'] = obEs.getNextFieldToEnter(rd[0])
+            configs['doc_data'] = obEs.getDataForDoc(rd[0])
+            configs['file_to_show'] = "doc" + rd[0] + ".pdf"
             configs['input_type'] = obEs.dataFields()[configs['data_field']]['input_type']
             configs['max_length'] = obEs.dataFields()[configs['data_field']]['max_length']
             if configs['input_type'] == "radio":
@@ -177,6 +187,7 @@ def mail_merge1():
     if ckl[0] == 1:
         obMm = mailMerge()
         dfm = obMm.getDataForMerge(session['working_user'],tsd)
+        if dfm == None: return render_template('error.html',ckl=ckl)
     return render_template('mailmerge1.html',dfm=dfm,ckl=ckl,tsd=tsd,ft=ft)
 
 @app.route('/mail_merge2',methods=['POST'])
@@ -202,6 +213,7 @@ def responses():
     if ckl[0] == 1:
         obR = classResponses()
         dfm = obR.getDataForView(session['working_user'],tsd,filter)
+        if dfm == None: return render_template('error.html',ckl=ckl)
     return render_template('responses.html',dfm=dfm,ckl=ckl,tsd=tsd,ft=ft,filter=filter)
 
 @app.route('/enter_response/<docnum>', methods=["GET"])

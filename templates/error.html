@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}"/>
+
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+      	<meta name="viewport" content="width=device-width, initial-scale=1">
+      	<meta name="description" content="Build or repair just about anything" />
+      	<meta name="keywords" content="handyman, waco, texas, home improvement, house repairs, contractor" />
+      	<meta name="author" content="hellofixit.net" />
+</head>
+{% block content %}
+<body style="background-color: #606060">
+<div style="background-color: grey;">
+  <div class="working">  
+    <a href="/">Welcome to Xylene</a>
+    <br><br>
+    Username: {{ckl[1]}}
+    <br><br>
+    Whoops: database error!
+{% endblock %}
+  </div>
+</div>
+</body>
+</html>

@@ -25,10 +25,13 @@
       {%elif ckl[0]==1:%}
         Here's what we already have for this document:
         <br><br>
+        <table style="padding:2%; margin-bottom:2%; min-width: 60%; border-style: double;">
+        <tr><td style="border:1px solid black">docnum</td><td>{{configs['docnum']}}</td></tr>
+        <tr><td style="border:1px solid black">created by</td><td>{{configs['username_created']}}</td></tr>
+        </table>
         <table>
-        <tr><td style="border:1px solid black">docnum</td><td>{{configs['docnum']}}</td>
         {%for i in configs['doc_data']%}
-          <tr><td style="border:1px solid black">{{i}}</td><td>{{configs['doc_data'][i]}}</td>
+          <tr><td style="border:1px solid black">{{i}}</td><td>{{configs['doc_data'][i]}}</td></tr>
         {%endfor%}
         </table>
         <br><br>
@@ -52,7 +55,7 @@
           <br><br>
           <input type="submit" value="submit">
         </form>
-        <br><br>
+        <br>
         {%if configs['data_field'] == "owner_name":%}
         <form id="myform" method="post" action="/submit">
           <input type="hidden" name="docnum" value="{{configs['docnum']}}">
@@ -69,7 +72,6 @@
           <a href="#" onclick="document.forms[1].submit();return false;">Owner mailing address is the same as property</a>
         </form>
         {%endif%}
-        <br><br>
         <a href="/mark_unknown/{{configs['docnum']}}/{{configs['data_field']}}">Skip and mark it unknown</a>
         <br><br>
     </div>
