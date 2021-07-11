@@ -104,31 +104,26 @@ def dashboard():
 @app.route('/new_files', methods=["POST","GET"])
 def new_files():
     newFiles = []
-    resultImport = ""
+    message = ""
     ckl = checkLogin()
     if ckl[0] == 1:
-        lastDocNum = dbStuff.getLastDocumentNumber()
-        if lastDocNum == None: 
+        # figure out the next document number to use
+        ldn = dbStuff.getLastDocumentNumber()
+        if ldn == None:
             return render_template('error.html',ckl=ckl)
         else:
-            ndn = int(lastDocNum) + 1
+            ndn = int(ldn) + 1
+        # if user just uploaded new files, save them as doc100001.pdf, doc100002.pdf, etc.
+        # then create new database records
         if request.method == "POST":
             fff = request.files.getlist("file")
             for f in fff:
-                f.save("static/documents/" + f.filename)
-        bbb = os.listdir("./static/documents")
-        for b in bbb:
-            if b[0:3] != "doc":
+                nf = "doc" + str(ndn) + ".pdf"
+                f.save("static/documents/" + nf)
+                newFiles.append(nf)
                 dbStuff.createBlankDocumentRecord(ckl[1],ndn,obEs.dataFields())
-                newFile = "doc" + str(ndn) + ".pdf"
-                newFiles.append(newFile)
-                os.rename("./static/documents/" + b,"./static/documents/" + newFile)
-                newFile = ""
-        if len(newFiles) == 0:
-            resultImport = "No new files detected"
-        else:
-            resultImport = "There were " + str(len(newFiles)) + " new files imported: "
-    return render_template('new_files.html',resultImport=resultImport,newFiles=newFiles,ckl=ckl)
+        message = "There were " + str(len(newFiles)) + " new files imported"
+    return render_template('new_files.html',message=message,newFiles=newFiles,ckl=ckl)
 
 @app.route('/enter_stuff')
 def enter_stuff():
