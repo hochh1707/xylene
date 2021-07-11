@@ -118,6 +118,7 @@ def new_files():
         if request.method == "POST":
             fff = request.files.getlist("file")
             for f in fff:
+                if f.filename == "": continue
                 nf = "doc" + str(ndn) + ".pdf"
                 f.save("static/documents/" + nf)
                 newFiles.append(nf)
