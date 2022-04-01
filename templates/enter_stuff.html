@@ -25,15 +25,25 @@
       {%elif ckl[0]==1:%}
         Here's what we already have for this document:
         <br><br>
-        <table style="padding:2%; margin-bottom:2%; min-width: 60%; border-style: double;">
-        <tr><td style="border:1px solid black">docnum</td><td>{{configs['docnum']}}</td></tr>
-        <tr><td style="border:1px solid black">created by</td><td>{{configs['username_created']}}</td></tr>
+        <!-- this table is the document number and username -->
+        <table style="padding:2%; margin-bottom:2%; width: 90%; border-style: double;">
+          <tr><td style="border: 1px solid black;">docnum</td><td>{{configs['docnum']}}</td></tr>
+          <tr><td style="border: 1px solid black">created by</td><td>{{configs['username_created']}}</td></tr>
         </table>
-        <table>
+        <!-- this table is all the meta data about the document -->
+        <table style="width: 100%; table-layout: fixed;">
         {%for i in configs['doc_data']%}
-          <tr><td style="border:1px solid black">{{i}}</td><td>{{configs['doc_data'][i]}}</td></tr>
+          <tr>
+            <td style="border:1px solid black; width:45%">{{i}}</td>
+            {%if i=='cad_link':%}
+              <td style="word-wrap:break-word;"><a href={{configs['doc_data'][i]}} target='_blank'>{{configs['doc_data'][i]}}</a></td>
+            {%else:%}
+              <td>{{configs['doc_data'][i]}}</td>
+            {%endif%}
+          </tr>
         {%endfor%}
         </table>
+        <!-- here's where you enter data -->
         <br><br>
         Now enter the following data: {{configs['data_field']}}
         <br><br>
@@ -46,7 +56,7 @@
             <label for="{{i}}">{{i}}</label><br>
             {%endfor%}
           {%else:%}
-            {%if configs['max_length'] > 50:%}
+            {%if configs['max_length'] > 150:%}
             <textarea name="data" autofocus=autofocus cols="50" rows="4" maxlength="{{configs['max_length']}}"></textarea>
             {%else:%}
             <input type="text" name="data" autofocus=autofocus size="{{configs['max_length']}}" maxlength="{{configs['max_length']}}">
@@ -62,22 +72,34 @@
           <input type="hidden" name="data_field" value="{{configs['data_field']}}">
           <input type="hidden" name="data" value="{{configs['doc_data']['borrower_name']}}">
           <a href="#" onclick="document.forms[1].submit();return false;">Owner name is same as borrower</a>
+          <br><br>
         </form>
         {%endif%}
+        <!-- helpful links -->
         {%if configs['data_field'] == "owner_mailing1":%}
         <form id="myform" method="post" action="/submit">
           <input type="hidden" name="docnum" value="{{configs['docnum']}}">
           <input type="hidden" name="data_field" value="{{configs['data_field']}}">
           <input type="hidden" name="data" value="{{configs['doc_data']['property_address']}}">
           <a href="#" onclick="document.forms[1].submit();return false;">Owner mailing address is the same as property</a>
+          <br><br>
         </form>
         {%endif%}
-        <a href="/mark_unknown/{{configs['docnum']}}/{{configs['data_field']}}">Skip and mark it unknown</a>
+        <a href="/mark/{{configs['docnum']}}/{{configs['data_field']}}/unk">Skip and mark this field unknown</a>
         <br><br>
+        <a href="/mark/{{configs['docnum']}}/status/skip">Mark this document with status = SKIP</a>
+        <br><br>
+        <form id="copy_old" method="post" action="/copy_old">
+          <input type="hidden" name="new_docnum" value="{{configs['docnum']}}">
+          <a href="#" onclick="document.forms[1].submit();return false;">Copy data from old document</a>
+          <br>
+          <input type="text" name="old_docnum" size="25" maxlength="6">
+          <br><br>
+        </form>
     </div>
   </div>
   <div style="width: 50%; margin-left: auto; margin-right: auto; margin-top: 100px;">
-      <embed src="/static/documents/{{configs['file_to_show']}}" width="800px" height="2100px"/>
+      <embed src="https://wuut.s3.us-east-2.amazonaws.com/{{configs['file_to_show']}}" type="application/pdf" width="800px" height="2100px"/>
   </div>
     {%endif%}
   {% endblock %}

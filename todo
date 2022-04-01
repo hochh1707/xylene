@@ -1,28 +1,75 @@
 ** NOW **
+- check for duplicate while entering data
 
-??
+** Bugs
+- Links to individual letters dont work in mail merge
+- For april 2022 there was one letter that got a prefix of 000 which should be reserved for the merged file
+- When you hit submit on the type of mortgage without making a selection it crashes
+
+** Upload documents **
+- Save the original file name and filter for duplicates
 
 
-** LATER **
+** Dashboard **
+- Show how many complete by month
+- show docs by county
+- show docs by type of sale
 
+
+** Data entry **
+- When I get to a TSN that seems like a repeat of one that I did last month:
+    - Need to be able to search on the name or address 
+    - Need to copy the data to the new document... or something
+- Be able to edit values in data entry for the current document
+- Automatically detect duplicated: turn document into text, then search the words for matches in old docs. Then pull up the old document if it's a foreclosure on the same house.
+- When user enters borrower name, check old docs to see if there is a match.
+- When user enters a subdivision with an apostrophe, it won't save in mysql
+- prepopulate owner mailing 1 as same as property by default
+- After user enters Cad link, use it to get the property address
+- Add a field for estimated equity. Not a user input. This will self calculate based on the DOT date and original mortgage amount.
+- Don't allow addresses without line break
+- Field for link to deed of trust
+- Status for skip document but come back to it later
+- Mark pages to skip in trustee sale notices (like if one is blank except for clerk stamp or something)
+- Allow user to filter for complete, incomplete, and skip
+- Email and phone number fields
+- Check again which fields really need multi line input boxes
+- Show progress meter aka how many blanks do I have left to go?
+
+
+** Mail merge **
+- add commas to numbers
+- Order by equity highest to lowest, but put condo foreclosures at the end
+- Filter by amount of equity, i.e. which ones go priorty mail vs snail mail
+- Show the estimated equity in mail merge page
+- Progress widget for xferring documents from s3 to local
+- Set max width for data labels on mail merge screen
+- Track how many times mailed
+- Make the selector for sale date into check boxes. Auto select the dates that are in the future.
+- Filter by county
+- How much time does it take to query db for one doc at a time in a loop vs. one query for many docs at once? (re. mail merge)
+
+
+** RESPONSES **
+- Need to be able to mark returned mail so I don't send to that address again
+- Need to build a responses page to enter what calls I get, returned mail, etc.
+- Add don't mail to this person
+
+
+** MISC **
+- Separate data options class from enterstuff class
+- Change trustee sale date from radio to checkboxes
+- Aws login should not be hard coded
+- Track login attempts
 System admin able to clear documents folder
-
 System admin able to download / backup documents folder
-
-Track login attempts
-
 Bullet points on page 2 of letter
-
 Allow users to upload and select letter to use
-
-Don't allow addresses without line break
-
 Track mailings
-
 Other documents besides trustee sale notices:
 - Appointment sub trustee
-
 Add fields:
-- Trustee deed date 
-- Mailed date 
-- Mailed which letter 
+	- Trustee deed date 
+	- Mailed date 
+	- Mailed which letter 
+- Random mode and sequential mode for data entry

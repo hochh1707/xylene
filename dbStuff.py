@@ -6,7 +6,7 @@ import os
 
 class classDbStuff(object):
     def __init__(self):
-        db = 2
+        db = 1
         if db == 1:
             self.mydb = mysql.connector.connect(
                     host = "localhost",
@@ -191,6 +191,7 @@ class classDbStuff(object):
         return x
 
     def checkIfBlank(self,docnum,field):
+        # picks the next data field that has not been filled in yet
         mycursor = self.mydb.cursor(dictionary=True)
         q1 = "SELECT data FROM documents WHERE docnum = " + str(docnum) + " AND field_name = '" + field + "'"
         try:
@@ -198,7 +199,11 @@ class classDbStuff(object):
             x = mycursor.fetchone()
         except Exception as e:
             print(e)
-        return x['data']
+        if x == None:
+            return False
+        elif x['data'] == "blank" or None:
+            return True
+        return False
 
     def enterResponse(self,userName,docnum,response):
         mycursor = self.mydb.cursor()
@@ -214,7 +219,7 @@ class classDbStuff(object):
     def enterReturn(self,userName,docnum,mailing):
         mycursor = self.mydb.cursor()
         q1 = ("INSERT INTO documents (username_created,username_updated,updated,docnum,field_name,data) VALUES('"
-                + userName + "','" + userName + "',NOW(),'" + str(docnum) + "','return_mail','" + str(mailing) + "')"
+                + userName + "','" + userName + "',NOW(),'" + str(docnum) + "','returned_mail','" + str(mailing) + "')"
                 )
         try:
             mycursor.execute(q1)

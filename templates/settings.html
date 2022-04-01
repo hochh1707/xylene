@@ -21,7 +21,7 @@
       Username: {{ckl[1]}}
       <br><br>
       {%if ckl[0]==1:%}
-        <form action="/settings" method="POST">
+        <form action="/user_settings" method="POST">
           <label>Select user for entering data and mail merge: </label>
           <select name="working_user" id="working_user">
             <option value="{{ckl[1]}}" {%if workingUser=='{{ckl[1]}}':%}selected{%endif%}>{{ckl[1]}}</option>

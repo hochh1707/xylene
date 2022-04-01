@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}"/>
+
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+      	<meta name="viewport" content="width=device-width, initial-scale=1">
+      	<meta name="description" content="Build or repair just about anything" />
+      	<meta name="keywords" content="handyman, waco, texas, home improvement, house repairs, contractor" />
+      	<meta name="author" content="hellofixit.net" />
+</head>
+<body style="background-color: #60e1b0;">
+  <div style="background-color: grey;">
+    <div class="working">
+      {% block content %}
+      RESPONSES-1
+      <br><br>
+      <a href="/">Xylene Home</a>
+      <br><br>
+      Username: {{ckl[1]}}
+      <br><br>
+      {%if ckl[0]==1:%}
+        {%if dfm|length >= 0:%}
+        <!-- Filters for which documents to view -->
+        <div>
+          There are: {{dfm|length}} documents for your filters
+          <br><br>
+          <form action="/responses" method="POST">
+            Select a trustee sale date:
+            <br>
+            <input type="radio" name="tsd" value="all" {%if tsd=="all":%}checked{%endif%}><label>All</label><br>
+            {%for f in ft:%}
+              <input type="radio" name="tsd" value="{{f}}" {%if tsd==f:%}checked{%endif%}><label>{{f}}</label><br>
+            {%endfor%}
+            <br><br>
+            Select counties:
+            <br>
+            {%for c in ccc:%}
+              <input type="checkbox" name={{c}} value={{c}} {%if ccc[c]==1:%}checked{%endif%}><label>{{c}}</label><br>
+            {%endfor%}
+            <br><br>
+            Select equity filter:<br>
+            <input type="radio" name="equity" value="all" {%if equity=="all":%}checked{%endif%}><label>All</label><br>
+            <input type="radio" name="equity" value="over100" {%if equity=="over100":%}checked{%endif%}><label>Over 100k</label><br>
+            <input type="radio" name="equity" value="under100" {%if equity=="under100":%}checked{%endif%}><label>Under 100k</label><br>
+            <br><br>
+            Returned mail filter:<br>
+            <input type="radio" name="filter_returned_mail" value="exclude" {%if filterReturnedMail=="exclude":%}checked{%endif%}><label>Exclude returned mail</label><br>
+            <input type="radio" name="filter_returned_mail" value="include" {%if filterReturnedMail=="include":%}checked{%endif%}><label>Include returned mail</label><br>
+            <input type="radio" name="filter_returned_mail" value="only" {%if filterReturnedMail=="only":%}checked{%endif%}><label>Only returned mail</label><br>
+            <br><br>
+            Responses filter:<br>
+            <input type="radio" name="filter_responses" value="exclude" {%if filterResponses=="exclude":%}checked{%endif%}><label>Exclude responses</label><br>
+            <input type="radio" name="filter_responses" value="include" {%if filterResponses=="include":%}checked{%endif%}><label>Include responses</label><br>
+            <input type="radio" name="filter_responses" value="only" {%if filterResponses=="only":%}checked{%endif%}><label>Only responses</label><br>
+            <br><br>
+            Sort field:<br>
+            <input type="radio" name="sort_field" value="equity" {%if sortField=="equity":%}checked{%endif%}><label>Equity</label><br>
+            <input type="radio" name="sort_field" value="updated" {%if sortField=="updated":%}checked{%endif%}><label>Date completed</label><br>
+            <br><br>
+            <label>Filter: </label><input type="text" name="filter_text" value="{{filterText}}">
+            <br><br>
+            <input type="submit" value="Filter!">
+          </form>
+          <br><br>
+
+
+
+
+
+          {%endif%}
+          {%if dfm|length > 0:%}
+
+
+
+
+
+
+          <!-- Display the documents to merge -->
+          {%for i in dfm:%}
+          <table style="padding:2%; margin:2%; min-width: 96%; border-style: double;">
+            <tr>
+              <td style="border: 1px solid black; width: 30%;">{{i['docnum']}}</td>
+              <td colspan="2">{{i['owner_name']}}</td>
+            </tr>
+            <tr><td style="border: 1px solid black">Property:</td>
+              <td><a href="/enter_response/{{i['docnum']}}">{{i['property_address']}}</td>
+            </tr>
+            <tr><td>CAD link:</td><td colspan="2"><a href="{{i['cad_link']}}" target="_blank">CAD link</a></td></tr>
+            <tr><td>Auction date:</td><td colspan="2">{{i['trustee_sale_date']}}</td></tr>
+            <tr><td>D.O.T. year:</td><td colspan="2">{{i['deed_of_trust_year']}}</td></tr>
+            <tr><td>Loan amount:</td><td colspan="2">{{i['original_loan_amount']}}</td></tr>
+            <tr><td>Market value:</td><td colspan="2">{{i['market_value']}}</td></tr>
+            <tr><td>Est. equity:</td><td colspan="2">{{i['est_equity']}}</td></tr>
+            <tr><td>Date completed:</td><td colspan="2">{{i['updated']}}</td></tr>
+            <tr><td style="border: 1px solid black">Mailing1:</td>
+              <td>{%if i['owner_mailing1'] !="unk":%}<a href="/submit_return/{{i['docnum']}}m1">{%endif%}{{i['owner_mailing1']}}</a></td>
+            </tr>
+            <tr>
+              <td style="border: 1px solid black">Returned mail:</td>
+              <td>{%if 'owner_mailing1' in i['returned_mail']:%}yes om1{%else:%}none{%endif%}</td>
+            </tr>
+            <tr><td style="border: 1px solid black">Mailing2:</td>
+              <td>{%if i['owner_mailing2'] !="unk":%}<a href="/submit_return/{{i['docnum']}}m2">{%endif%}{{i['owner_mailing2']}}</a></td>
+            </tr>
+            <tr>
+              <td style="border: 1px solid black">Returned mail:</td>
+              <td>{%if 'owner_mailing2' in i['returned_mail']:%}yes om2{%else:%}none{%endif%}</td>
+            </tr>
+            <tr>
+              <tr><td>Responses:</td><td colspan="2">{{i['responses']}}</td></tr>
+            </tr>
+          </table>
+          {%endfor%}
+        </div>
+        {%endif%}
+      {%endif%}
+      {% endblock %}
+    </div>
+  </div>
+</body>
+</html>

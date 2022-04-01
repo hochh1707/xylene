@@ -18,6 +18,8 @@
       <br><br>
       <a href="/">Xylene Home</a>
       <br><br>
+      <a href="/responses">Back to Responses page</a>
+      <br><br>
       Username: {{ckl[1]}}
       <br><br>
       {%if ckl[0]==1:%}
@@ -39,15 +41,15 @@
                 <td>{{i['owner_mailing1']}}</td>
               </tr>
               <tr>
-                <td style="border: 1px solid black">Return mail:</td>
-                <td>{%if i['return_mail']['owner_mailing1']|length == 0:%}none{%else:%}{{i['return_mail']['owner_mailing1']|length}}{%endif%}</td>
+                <td style="border: 1px solid black">Returned mail:</td>
+                <td>{%if 'owner_mailing1' in i['returned_mail']:%}yes om1{%else:%}none{%endif%}</td>
               </tr>
                 <tr><td style="border: 1px solid black">Mailing2:</td>
                 <td>{{i['owner_mailing2']}}</td>
               </tr>
               <tr>
-                <td style="border: 1px solid black">Return mail:</td>
-                <td>{%if i['return_mail']['owner_mailing2']|length == 0:%}none{%else:%}{{i['return_mail']['owner_mailing2']|length}}{%endif%}</td>
+                <td style="border: 1px solid black">Returned mail:</td>
+                <td>{%if 'owner_mailing2' in i['returned_mail']:%}yes om2{%else:%}none{%endif%}</td>
               </tr>
               </table>
             <div style="padding:2%; margin:2%; min-width: 90%; border-style: double;">

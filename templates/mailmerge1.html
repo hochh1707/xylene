@@ -24,37 +24,74 @@
         {%if dfm|length == 0:%}
         There are no documents ready to mail merge!
         {%else:%}
+
+
+
+
+        <!-- Filters for which documents to mail merge -->
         <div>
-          Choose a trustee sale date:
-          <br>
+          There are: {{dfm|length}} documents to mail merge
+          <br><br>
           <form action="/mail_merge1" method="POST">
+            Select a trustee sale date:
+            <br>
             <input type="radio" name="tsd" value="all" {%if tsd=="all":%}checked{%endif%}><label>All</label><br>
             {%for f in ft:%}
               <input type="radio" name="tsd" value="{{f}}" {%if tsd==f:%}checked{%endif%}><label>{{f}}</label><br>
             {%endfor%}
-            <input type="submit" value="submit">
+            <br><br>
+            Select counties:
+            <br>
+            {%for c in ccc:%}
+              <input type="checkbox" name={{c}} value={{c}} {%if ccc[c]==1:%}checked{%endif%}><label>{{c}}</label><br>
+            {%endfor%}
+            <br><br>
+            Select equity filter:<br>
+            <input type="radio" name="equity" value="all" {%if equity=="all":%}checked{%endif%}><label>All</label><br>
+            <input type="radio" name="equity" value="over100" {%if equity=="over100":%}checked{%endif%}><label>Over 100k</label><br>
+            <input type="radio" name="equity" value="under100" {%if equity=="under100":%}checked{%endif%}><label>Under 100k</label><br>
+            <br><br>
+            Returned mail filter:<br>
+            <input type="radio" name="filter_returned_mail" value="exclude" {%if filterReturnedMail=="exclude":%}checked{%endif%}><label>Exclude returned mail</label><br>
+            <input type="radio" name="filter_returned_mail" value="include" {%if filterReturnedMail=="include":%}checked{%endif%}><label>Include returned mail</label><br>
+            <br><br>
+            Sort field:<br>
+            <input type="radio" name="sort_field" value="equity" {%if sortField=="equity":%}checked{%endif%}><label>Equity</label><br>
+            <input type="radio" name="sort_field" value="updated" {%if sortField=="updated":%}checked{%endif%}><label>Date completed</label><br>
+            <br>
+            <input type="submit" value="Filter!">
           </form>
           <br><br>
           <form action="/mail_merge2" method="POST">
+            <input type="submit" value="Merge!">
+
+
+
+
+          <!-- Display the documents to merge -->
           {%for i in dfm:%}
           <table style="padding:2%; margin:2%; min-width: 96%; border-style: double;">
             <tr>
-              <td style="border: 1px solid black">{{i['docnum']}}</td>
+              <td style="border: 1px solid black; width: 30%;">{{i['docnum']}}</td>
               <td colspan="2">{{i['owner_name']}}</td>
             </tr>
             <tr><td>Property:</td><td colspan="2">{{i['property_address']}}</td></tr>
-            <tr><td>Trustee sale date:</td><td colspan="2">{{i['trustee_sale_date']}}</td></tr>
+            <tr><td>Auction date:</td><td colspan="2">{{i['trustee_sale_date']}}</td></tr>
+            <tr><td>D.O.T. year:</td><td colspan="2">{{i['deed_of_trust_year']}}</td></tr>
+            <tr><td>Loan amount:</td><td colspan="2">{{i['original_loan_amount']}}</td></tr>
+            <tr><td>Market value:</td><td colspan="2">{{i['market_value']}}</td></tr>
+            <tr><td>Est. equity:</td><td colspan="2">{{i['est_equity']}}</td></tr>
+            <tr><td>Date completed:</td><td colspan="2">{{i['updated']}}</td></tr>
             <tr>
-              <td>{%if i['owner_mailing1'] != "unk":%}<input type="checkbox" name="{{i['docnum']}}_m1" checked>{%endif%}</td>
-              <td>Mailing1:</td><td>{{i['owner_mailing1']}}</td>
+              <td>Mailing1: {%if i['owner_mailing1'] != "unk":%}<input type="checkbox" name="{{i['docnum']}}_m1" checked>{%endif%}</td>
+              <td>{{i['owner_mailing1']}}</td>
             </tr>
             <tr>
-              <td>{%if i['owner_mailing2'] != "unk":%}<input type="checkbox" name="{{i['docnum']}}_m2" checked>{%endif%}</td>
-              <td>Mailing2:</td><td>{{i['owner_mailing2']}}</td>
+              <td>Mailing2: {%if i['owner_mailing2'] != "unk":%}<input type="checkbox" name="{{i['docnum']}}_m2" checked>{%endif%}</td>
+              <td>{{i['owner_mailing2']}}</td>
             </tr>
           </table>
           {%endfor%}
-        <input type="submit" value="merge!">
         </form>
         </div>
         {%endif%}
