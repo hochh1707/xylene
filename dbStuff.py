@@ -7,7 +7,7 @@ import os
 class classDbStuff(object):
     def __init__(self):
         db = 2
-        if db == 2:
+        if db == 1:
             self.mydb = mysql.connector.connect(
                     host = "localhost",
                     user = "root",
@@ -21,7 +21,7 @@ class classDbStuff(object):
                     host = "database-1.cqljsryczijv.us-east-2.rds.amazonaws.com",
                     user = "admin",
                     password = "PUm9XNAU0apzmZTk3F6a",
-                    database = "admin",
+                    database = "xylene",
                     autocommit = True
                     )
 

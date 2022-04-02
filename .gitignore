@@ -1,2 +1,2 @@
-./static/documents/**
-./static/pdf_output/**
+/static/documents/**
+/static/pdf_output/**
