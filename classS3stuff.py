@@ -10,7 +10,7 @@ class classS3stuff(object):
             # aws_access_key_id='AKIA5FW42GJNL3SWB46P',
             # aws_secret_access_key='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')
             aws_access_key_id = os.environ['S3_KEY'],
-            aws_secret_access_key = os.eviron['S3_SECRET'])
+            aws_secret_access_key = os.environ['S3_SECRET'])
         return s3_resource
     
     def xferDocs(self,listToMail):
